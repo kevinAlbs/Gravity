@@ -7,6 +7,9 @@
  */
 GM.game = (function(){
 	var that = {};
+	that.debug = {
+		noDie : true
+	};
 	that.delta = 0;	
 	var	paused= false, //if true, it will still update, but not run anything
 		movementPaused = false,//used for cutscenes, stops user movment
@@ -39,115 +42,70 @@ GM.game = (function(){
 		player = null,
 		playerDead = false;
 
+	var gravSwitch = 3; //Gravity is either 1 (up), 2(right), 3(down), or 4(left). Default is down.
+	var gravSwitchLock = false;
 
-	function handleKeyDown(e){
-		console.log(e.which);
-		switch(e.which){
+	function switchKeys(e, val){
+		var key = e.which;
+		switch(key){
 			case 32:
-			keys.restart = true;
+			keys.restart = val;
 			e.preventDefault();
 			break;
 
 			case 87:
-			keys.w = true;
+			keys.w = val;
 			e.preventDefault();
 			break;
 
 			case 83:
-			keys.s = true;
+			keys.s = val;
 			e.preventDefault();
 			break;
 
 			case 65:
-			keys.a = true;
+			keys.a = val;
 			e.preventDefault();
 			break;
 
 			case 68:
-			keys.dk = true;
+			keys.dk = val;
 			e.preventDefault();
 			break;
 
 			case 39:
-			keys.r = true;
+			keys.r = val;
 			e.preventDefault();
 			break;
 
 			case 37:
-			keys.l = true;
+			keys.l = val;
 			e.preventDefault();
 			break;
 
 			case 38:
-			keys.u = true;
+			keys.u = val;
 			e.preventDefault();
 			break;
 
 			case 40:
-			keys.d = true;
+			keys.d = val;
 			e.preventDefault();
 			break;
 
 			case 32:
-			keys.sp = true;
+			keys.sp = val;
 			e.preventDefault();
 			break;
 		}
 	}
+	function handleKeyDown(e){
+	//	console.log(e.which);
+		switchKeys(e, true);
+	}
 
 	function handleKeyUp(e){
-		switch(e.which){
-			case 32:
-			keys.restart = false;
-			e.preventDefault();
-			break;
-
-			case 87:
-			keys.w = false;
-			e.preventDefault();
-			break;
-
-			case 83:
-			keys.s = false;
-			e.preventDefault();
-			break;
-
-			case 65:
-			keys.a = false;
-			e.preventDefault();
-			break;
-
-			case 68:
-			keys.dk = false;
-			e.preventDefault();
-			break;
-
-			case 39:
-			keys.r = false;
-			e.preventDefault();
-			break;
-
-			case 37:
-			keys.l = false;
-			e.preventDefault();
-			break;
-
-			case 38:
-			keys.u = false;
-			e.preventDefault();
-			break;
-
-			case 40:
-			keys.d = false;
-			e.preventDefault();
-			break;
-
-			case 32:
-			keys.sp = false;
-			e.preventDefault();
-			break;
-		}
-		return false;
+		switchKeys(e, false);
 	}
 	function handleMousemove(e){
 		mouse.x = e.layerX;
@@ -207,11 +165,7 @@ GM.game = (function(){
 		GM.platformList.destroy();
 		GM.objectList.destroy();
 	}
-	function checkCollisions(){
 
-	}
-	var gravSwitch = 3; //Gravity is either 1 (up), 2(right), 3(down), or 4(left). Default is down.
-	var gravSwitchLock = false;
 	function switchGravity(val){
 		if(gravSwitchLock != false){return;}
 		gravSwitchLock = val;//only this val will unlock
@@ -260,7 +214,6 @@ GM.game = (function(){
 		prevTime = newTime;
 
 
-		checkCollisions();
 		var movementDebug = true;
 		var flip = 1;
 		if(gravSwitch == 2){
@@ -321,7 +274,8 @@ GM.game = (function(){
 
 		var kb = GM.objectList.collidingKBlocks(player);
 		if(kb != null){
-			console.log("DEAD");
+			//walk into a killer block, get killed fool
+			that.playerDies();
 			kb.setHidden(false);
 		}
 		GM.objectList.checkDotCollisions(player);
@@ -443,14 +397,18 @@ GM.game = (function(){
 		GM.particleList.generateParticles(stg);	
 	};
 
-	that.handlePlayerDeath = function(){
-		if(hudScore > hudBestScore){
-			hudBestScore = hudScore;
+	that.playerDies = function(){
+		if(that.debug.noDie){return;}
+		if(!player.isDead()){
+			player.getKilled();
 		}
+	};
+
+	that.handlePlayerDeath = function(){
 		paused = true;
 		playerDead = true;
-		hudStat = "YOU DIED :(<br/>PRESS SPACE TO RESTART";
-		that.updateHUD();
-	}
+		hudStat = "PRESS SPACE TO RESTART";
+	};
+
 	return that;
 }());

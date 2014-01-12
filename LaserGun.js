@@ -77,7 +77,7 @@ function LaserGun(){
 			
 			determineClosest(fakePlayer);
 			if(closestObj == fakePlayer){
-				console.log("Dead");
+				GM.game.playerDies();
 			}
 		}
 

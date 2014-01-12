@@ -2,9 +2,17 @@
 GM.platformList = (function(){
 	var that = {};
 	var root = null;//since platforms only have the extra next/prev properties + spikes, I'm going to use Movable objects
-	var rear = null;
-	var cur = null;
+	var endPlatform = null;
 	
+
+	function setEnd(p){
+		endPlatform = p;
+	}
+
+	that.noMoreDots = function(){
+		endPlatform.next = root;
+		root = endPlatform;
+	}
 	that.getRoot = function(){
 		return root;//will probably change
 	}
@@ -59,20 +67,17 @@ GM.platformList = (function(){
 		}
 	};
 
-	this.generatePlatform = function(x,y,width,height){
+	this.generatePlatform = function(x,y,width,height,noAdd){
 		var newObj = new Platform();
 		newObj.setX(x);
 		newObj.setY(y);
 		newObj.setWidth(width);
 		newObj.setHeight(height);
-		if(root == null){
+		if(!noAdd){
+			newObj.next = root;
 			root = newObj;
-			rear = root;
 		}
-		else{
-			rear.next = newObj;
-			rear = newObj;
-		}
+		return newObj;
 	}
 	/*
 	From experimentation, seems like maximum y difference is 119 away (up) in exactly 11 frames (I think)
@@ -91,6 +96,8 @@ GM.platformList = (function(){
 		generatePlatform(590,0,10,600);
 		generatePlatform(0,0,600,10);
 		generatePlatform(0,590,600,10);
+
+		setEnd(generatePlatform(140,300,100,10,true));
 	};
 	/** @param m Movable - the object
 	    @param p Movable - the platform

@@ -8,8 +8,8 @@ function Player(){
 	this._x = 80;
 	this._y = 210;
 	this._walkingSpeed = .3; //in pixels per ms
-	this._width = 20; 
-	this._height = 20;
+	this._width = 16; 
+	this._height = 16;
 	this._jumpSpeed = .5;
 	this._hasLongJump = true;
 
@@ -65,7 +65,6 @@ function Player(){
 	this.jump = function(){
 		if(this.onPlatform() && !this._dead){
 			var grav = GM.game.getGravSwitch();
-			console.log(grav);
 			if(grav == 1){
 				this._yVel = this._jumpSpeed;	
 			}
@@ -162,12 +161,30 @@ function Player(){
 	
 
 	this.paint = function(ctx){
-		Player.prototype.paint.call(this, ctx);
+		if(!this._dead){
+			Player.prototype.paint.call(this, ctx);
+		}
 	};
 
 	
 	this._die = function(){
 		Player.prototype._die.call(this);
+		GM.game.generateParticles({
+			x: this._x + this._width/2,
+			y: this._y + this._height/2,
+			num: 20,
+			color: "#000",
+			time: 2000,
+			init_speed_y: .3,
+			init_speed_x_variance: .1,
+			init_speed_y_variance: .1
+		});
+		this._width = 1;//setting to zero causes error... TODO: find and fix!
+		this._height = 1;
+	}
+
+	this.getKilled = function(){
+		this._die();
 	}
 
 };
