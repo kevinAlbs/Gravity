@@ -11,49 +11,11 @@ function Mob(){
 	this.name = "";
 
 	//dir must be -1, 0, or 1
-	this.move = function(dir, grav){
-		if(!this._dead){
-			if(dir != 0){
-				if(!this._ducking){
-					this._walking = true;
-				}
-				this._facing = Math.abs(dir)/dir;
-			} 
-			else{
-				this._walking = false;
-			}
-			if(grav == 1 || grav == 3){
-				this._xVel = dir * this._walkingSpeed;
-			}
-			else{
-				this._yVel = dir * this._walkingSpeed;	
-			}
-		}
+	this.moveX = function(dir){
 	};
-	this.unMove = function(grav){
-		if(grav == 1 || grav == 3){
-			var ab = Math.abs(this._xVel)
-			this._walking = false;
-			if(ab < .03){
-				this._xVel = 0;
-			}
-			else if(ab > 0){
-				this._xVel *= .75;
-			}
-		}
-		else{
-			var ab = Math.abs(this._yVel)
-			this._walking = false;
-			if(ab < .03){
-				this._yVel = 0;
-			}
-			else if(ab > 0){
-				this._yVel *= .75;
-			}
-		}
+	this.unMoveX = function(){
 	}
 
-	//TODO: fix for gravity direction
 	this.jump = function(){
 		if(this.onPlatform() && !this._ducking){
 			this._yVel = this._jumpSpeed;

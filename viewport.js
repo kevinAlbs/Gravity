@@ -6,14 +6,9 @@ GM.viewport = (function(){
 	var cWidth, cHeight, mapWidth;
 	var leftMin = 0, rightMax = 0;//left/right bounds in pixels
 
-	var timeFactor = 0;//for time of day (currently unused TODO	)	
-	var time = 1;
-
-	/*
-	 this is the absolute x and y of the player
-	 changes offsets on viewport to follow player
-	*/
 	function updateOffsets(x,y){
+		xOffset = 0;
+		return;
 		//to center x:
 		xOffset = (x - cWidth / 5);
 		if(xOffset < leftMin){
@@ -26,7 +21,8 @@ GM.viewport = (function(){
 
 	};
 
-	that.init = function(cW, cH, mW){	
+	that.init = function(cW, cH, mW){
+	
 		xOffset = 0;
 		leftMin = 0;
 		rightMax = 0;
@@ -34,20 +30,10 @@ GM.viewport = (function(){
 		cHeight = cH;
 		mapWidth = mW;
 		rightMax = mapWidth * 10;
-		//put the threes in random offsets (at least 100 away) since there are more than 10, you'll never see all of them on the screen
-
+		
 	};
 	that.update = function(playerx, playery){
-		updateOffsets(playerx, playery);
-		timeFactor += time;
-		if(timeFactor > 1000){
-			time = -1;
-		}
-		else if(timeFactor <= 0){
-			time = 1;
-		}
-		
-		
+		updateOffsets(playerx, playery);	
 	};
 	that.paint = function(ctx){
 

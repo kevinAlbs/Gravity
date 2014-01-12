@@ -38,10 +38,10 @@
 
 	}
 	#container{
-		width: 1000px;
+		width: 600px;
 		margin: 10px auto;
 		position: relative;
-		border: 10px #14152e solid;
+		border: 1px #000 solid;
 	}
 	.screen{
 		

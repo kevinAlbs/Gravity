@@ -6,12 +6,13 @@
 	</style>
 </head>
 <body>
+	<p id="debug"></p>
 <div id="container">
 	<div id="screen-loading" class="screen no-highlight">
 		<h2>Loading...</h2>
 	</div>
 	<div id="screen-gameplay" class="screen no-highlight">
-		<canvas id="mycanvas" width="1000" height="600"></canvas>
+		<canvas id="mycanvas" width="600" height="600"></canvas>
 	</div>
 </div>
 <!--
@@ -42,10 +43,10 @@
 <script src="Person.js"></script>
 <script src="Player.js"></script>
 <script src="game.js"></script>
-<script src="viewport.js"></script>
 <script src="Platform.js"></script>
 <script src="platformList.js"></script>
 <script src="particleList.js"></script>
+<script src="viewport.js"></script>
 <script>
 function pageLoaded(){
 	//onces deps are loaded, start game

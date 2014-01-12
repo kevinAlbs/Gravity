@@ -204,9 +204,11 @@ Movable.prototype.movementUpdate = function(){
 		//check screen bounds
 		if(this._x < 0){
 			this._x = 0;
+			this._xVel = 0;
 		}
 		if(this._x + this._width > GM.game.getMapWidth()){
 			this._x = GM.game.getMapWidth() - this._width;
+			this._yVel = 0;
 		}
 };
 
@@ -214,5 +216,14 @@ Movable.prototype.movementUpdate = function(){
 Movable.prototype.applyGravity = function(){
 		//apply gravity
 		this._yVel += this._yGrav * GM.game.delta;
+		var ay = Math.abs(this._yVel);
+		if(ay > this._gravityMax){
+			this._yVel = this._yVel / ay * this._gravityMax;
+		}
 		this._xVel += this._xGrav * GM.game.delta;
+		var ax = Math.abs(this._xVel);
+		if(ax > this._gravityMax){
+			this._xVel = this._xVel / ax * this._gravityMax;
+		}
+		document.getElementById("debug").innerHTML = (GM.game.getGravSwitch() + ", " + this._yGrav + "," + this._yVel + "px/ms");
 };

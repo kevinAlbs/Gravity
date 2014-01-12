@@ -77,8 +77,14 @@ GM.platformList = (function(){
 	This will generate platforms on the end of the linked list
 	*/
 	that.generatePlatforms = function(num, difficulty){
-		generatePlatform(100,10,100,10);
-		generatePlatform(50,400,500,20);
+		generatePlatform(100,200,100,10);
+		generatePlatform(100,150,10,50);
+		generatePlatform(50,400,500,10);
+
+		generatePlatform(0,0,10,600);
+		generatePlatform(590,0,10,600);
+		generatePlatform(0,0,600,10);
+		generatePlatform(0,590,600,10);
 	};
 	/** @param m Movable - the object
 	    @param p Movable - the platform

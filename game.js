@@ -176,7 +176,6 @@ GM.game = (function(){
 		//ctx.webkitImageSmoothingEnabled = false;
 		cWidth = cnv.width;
 		cHeight = cnv.height;
-		mapWidth = 50000;//in blocks
 		playerDead = false;
 		won = false;
 
@@ -209,10 +208,10 @@ GM.game = (function(){
 	function checkCollisions(){
 
 	}
-	var gravSwitch = 1;
+	var gravSwitch = 3; //Gravity is either 1 (up), 2(right), 3(down), or 4(left). Default is down.
 	var gravSwitchLock = false;
 	function switchGravity(val){
-		if(gravSwitchLock){return;}
+		if(gravSwitchLock != false){return;}
 		gravSwitchLock = val;//only this val will unlock
 		gravSwitch = val;
 		if(val == 1){
@@ -263,13 +262,13 @@ GM.game = (function(){
 		var movementDebug = true;
 		if(!movementPaused){
 			if(keys.r){
-				player.move(1, gravSwitch);
+				player.movePerp(1);
 			}
 			else if(keys.l){
-				player.move(-1, gravSwitch);
+				player.movePerp(-1);
 			}
 			else{
-				player.unMove(gravSwitch);
+				player.unMovePerp();
 			}
 			if(keys.u){
 				player.jump();
@@ -303,7 +302,7 @@ GM.game = (function(){
 			}
 		}
 		else{
-			player.moveX(0);//no moving during cutscenes!
+			player.movePerp(0);//no moving during cutscenes!
 		}
 		//update everything
 		player.update();
@@ -411,7 +410,7 @@ GM.game = (function(){
 		init();
 	};
 
-	
+	that.getGravSwitch = function(){return gravSwitch;};
 	that.getXOffset = function(){
 		return GM.viewport.getXOffset();
 	};
