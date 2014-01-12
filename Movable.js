@@ -225,5 +225,5 @@ Movable.prototype.applyGravity = function(){
 		if(ax > this._gravityMax){
 			this._xVel = this._xVel / ax * this._gravityMax;
 		}
-		document.getElementById("debug").innerHTML = (GM.game.getGravSwitch() + ", " + this._yGrav + "," + this._yVel + "px/ms");
+		//document.getElementById("debug").innerHTML = (GM.game.getGravSwitch() + ", " + this._yGrav + "," + this._yVel + "px/ms");
 };

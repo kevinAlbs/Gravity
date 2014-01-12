@@ -4,11 +4,15 @@ function LaserGun(){
 	var firing = false,
 		closestT = 1000,
 		closestObj = null,
+		ON_TIME = 1000,
+		OFF_TIME = 2000,
 		PULSATE_TIME = 1000,
-		pulsateTimer = PULSATE_TIME;
+		pulsateTimer = OFF_TIME;
 
 	var dx = 1,dy = 1;//change in x and y for line
 	var that = this;
+
+
 	//ll is linked list
 	function determineClosest(ll){
 		var startX = that._x + that._width/2,
@@ -62,7 +66,12 @@ function LaserGun(){
 		pulsateTimer -= GM.game.delta;
 		if(pulsateTimer < 0){
 			firing = !firing;
-			pulsateTimer = PULSATE_TIME;
+			if(firing){
+				pulsateTimer = ON_TIME;
+			}
+			else{
+				pulsateTimer = OFF_TIME;
+			}
 		}
 
 		if(firing){
@@ -100,6 +109,9 @@ function LaserGun(){
 		ctx.fillStyle = "#000";
 	};
 
-	firing = true;
+	this.setTime = function(on,off){
+		ON_TIME = on;
+		OFF_TIME = off;
+	}
 }
 GM.utils.inherits(LaserGun, Movable);

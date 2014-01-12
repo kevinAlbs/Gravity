@@ -7,24 +7,16 @@ function BuilderScreen(){
 	var curX=0,curY=0;//x,y coordinates of mouse
 	var shortcuts = {
 		"c": "cursor",
-		"p": "platform",
+		"h": "platform",
+		"v": "vplatform",
+		"k": "kblock",
+		"o": "dot",
 		"d": "delete",
-		"m": "move",
-		"z": "zombie",
-		"f": "flyer",
-		"b": "firebreather",
-		"t": "centaur",
-		"s": "spike",
-		"e": "export",
-		"a": "ammo",
-		"h": "health"
+		"e": "export"
 	};
 
 	var container = $("#scroller");
 
-	function xOff(){
-		return container.position().left;
-	}
 
 	//goes through all platforms, returns the one directly under the object
 	function getPlatformOf(obj){
@@ -105,12 +97,6 @@ function BuilderScreen(){
 	function handleTextBlur(e){
 		var tb = $(e.target);
 		var obj = tb.parent();
-		var bar = obj.find(".radius");
-		var newWidth = 2 * parseInt(tb.val()) + obj.width();
-		bar.width(newWidth);
-		bar.css({
-			left: (obj.width()/2 - newWidth/2) + "px"
-		});
 	}
 
 	function handleClick(e){
@@ -136,7 +122,7 @@ function BuilderScreen(){
 
 		//if x and y are not defined, put them in corner
 		if(!x){
-			x = 100 + (-1 * xOff());
+			x = 100;
 			y = 10;
 		}
 		
@@ -149,12 +135,12 @@ function BuilderScreen(){
 			case "move":
 				container.draggable("enable");
 			break;
-			case "ammo":
-				var newObj = $("<div></div>").addClass("ammo object").css({
+			case "dot":
+				var newObj = $("<div></div>").addClass("dot object").css({
 					left: x + "px",
 					top: y + "px"
 				});
-				newObj.draggable({containment: container, snap: ".platform", snapMode: "outer"});
+				newObj.draggable({containment: container});
 				selectObj(newObj);
 				container.append(newObj);
 			break;
@@ -167,48 +153,15 @@ function BuilderScreen(){
 				selectObj(newObj);
 				container.append(newObj);
 			break;
-			case "zombie":
-				var newObj = $("<div><input type='text' /><div class='radius'></div></div>").addClass("zombie object").css({
+			case "kblock":
+				var newObj = $("<div><input type='text' /><div class='popup'></div></div>").addClass("kblock object").css({
 					left: x + "px",
 					top: y + "px"
 				});
 				if(d){
 					newObj.find("input[type=text]").val(d).blur();
 				}
-				newObj.draggable({containment: container, snap: ".platform", snapMode: "outer"});
-				selectObj(newObj);
-				container.append(newObj);
-			break;
-			case "firebreather":
-				var newObj = $("<div><input type='text' /><div class='radius'></div></div>").addClass("firebreather object").css({
-					left: x + "px",
-					top: y + "px"
-				});
-				if(d){
-					newObj.find("input[type=text]").val(d).blur();
-				}
-				newObj.draggable({containment: container, snap: ".platform", snapMode: "outer"});
-				selectObj(newObj);
-				container.append(newObj);
-			break;
-			case "centaur":
-				var newObj = $("<div><input type='text' /><div class='radius'></div></div>").addClass("centaur object").css({
-					left: x + "px",
-					top: y + "px"
-				});
-				if(d){
-					newObj.find("input[type=text]").val(d).blur();
-				}
-				newObj.draggable({containment: container, snap: ".platform", snapMode: "outer"});
-				selectObj(newObj);
-				container.append(newObj);
-			break;
-			case "flyer":
-				var newObj = $("<div></div>").addClass("flyer object").css({
-					left: x + "px",
-					top: y + "px"
-				});
-				newObj.draggable({containment: container});
+				newObj.draggable({containment: container}).resizable({handles: "n,s,e,w", containment: container});
 				selectObj(newObj);
 				container.append(newObj);
 			break;
@@ -222,14 +175,20 @@ function BuilderScreen(){
 				container.append(newObj);
 			break;
 			case "platform":
+			case "vplatform":
 				var newObj = $("<div></div>").addClass("platform object").css({
 					left: x + "px",
 					top:  y + "px"
 				});
+				if(tool == "vplatform"){
+					w =10;
+					newObj.css("height", "100px");	
+				}
 				if(w){
 					newObj.css("width", w + "px");
 				}
-				newObj.draggable({containment: container}).resizable({handles: "e,w", containment: container });
+
+				newObj.draggable({containment: container}).resizable({handles: "n,s,e,w", containment: container });
 				selectObj(newObj);
 				container.append(newObj);
 			break;
@@ -322,75 +281,43 @@ function BuilderScreen(){
 		for(var i = 0; i < ps.size(); i++){
 			var p = $(ps.get(i));
 			var ss = getObjectsOn(p);
-			var spikes =[];
-			var pickups = [];
-			for(var j = 0; j < ss.length; j++){
-				var s = $(ss[j]);
-				if(s.hasClass("spike")){
-					spikes.push({
-						x: s.position().left
-					});
-				}
-				else if(s.hasClass("ammo")){
-					pickups.push({
-						x: s.position().left,
-						type: "ammo"
-					});
-				}
-				else if(s.hasClass("health")){
-					pickups.push({
-						x: s.position().left,
-						type: "health"
-					});
-				}
-			}
-			spikes = sort(spikes);
 			platforms.push({
 				x: p.position().left,
 				y: p.position().top,
 				width: p.width(),
-				spikes: spikes,
-				pickups: pickups
+				height: p.height()
 			});
 		}
-		platforms = sort(platforms);
-
-		//sort enemies by x
-		var enemies = [];
-		var es = $(".zombie,.centaur,.firebreather,.flyer");
-		for(var i = 0; i < es.size(); i++){
-			var e = $(es.get(i));
-			var type = "zombie";
-			if(e.hasClass("centaur")){
-				type = "centaur";
-			}
-			else if(e.hasClass("firebreather")){
-				type = "firebreather";
-			}
-			else if(e.hasClass("flyer")){
-				type = "flyer";
-			}
-			var dist = e.find("input[type=text]");
-			if(dist.size() > 0){
-				dist = dist.val();
-			}
-			else{
-				dist = 0;
-			}
-
-			enemies.push({
-				x: e.position().left,
-				y: e.position().top,
-				type: type,
-				dist: dist
+	
+		var kBlocks = [];
+		var ks = $(".kblock");
+		for(var i = 0; i < ks.size(); i++){
+			var k = $(ks.get(i));
+			var hidden = k.find("input").val() == 1;
+			kBlocks.push({
+				x: k.position().left,
+				y: k.position().top,
+				width: k.width(),
+				height: k.height(),
+				hidden: hidden
 			});
 		}
-		enemies = sort(enemies);
+
+		var dots = [];
+		var ds = $(".dot");
+		for(var i = 0; i < ds.size(); i++){
+			var d = $(ds.get(i));
+			dots.push({
+				x: d.position().left,
+				y: d.position().top
+			});
+		}
 
 		var player = $(".player");
 		var output = {
 			platforms: platforms,
-			enemies: enemies,
+			kblocks: kBlocks,
+			dots: dots,
 			playerX: player.position().left,
 			playerY: player.position().top
 		};

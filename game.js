@@ -44,6 +44,10 @@ GM.game = (function(){
 
 	var gravSwitch = 3; //Gravity is either 1 (up), 2(right), 3(down), or 4(left). Default is down.
 	var gravSwitchLock = false;
+	var d = new Date();
+	var ticks = 0;
+	var timeCount = 0;
+	var prevTime = null;
 
 	function switchKeys(e, val){
 		var key = e.which;
@@ -123,6 +127,7 @@ GM.game = (function(){
 	//data is exported object from builder
 	function buildFromData(data){
 		GM.platformList.importPlatforms(data.platforms);
+		GM.objectList.importObjects(data);
 	}
 
 
@@ -190,10 +195,7 @@ GM.game = (function(){
 			gravSwitchLock = false;
 		}
 	}
-	var d = new Date();
-	var ticks = 0;
-	var timeCount = 0;
-	var prevTime = null;
+
 
 	function update(timestamp){
 		if(playerDead){
@@ -214,7 +216,6 @@ GM.game = (function(){
 		prevTime = newTime;
 
 
-		var movementDebug = true;
 		var flip = 1;
 		if(gravSwitch == 2){
 			flip = -1;
@@ -268,19 +269,24 @@ GM.game = (function(){
 		GM.viewport.update(player.getX(), player.getY());
 		GM.objectList.update();
 		paint();
-		
-		//now that update has run, set all key presses to false
-		keys.zp = false;
-
+		if(GM.objectList.checkEndBlockCollision(player)){
+			//also checks if end of stage
+			console.log("END OF STAGE");
+		}
 		var kb = GM.objectList.collidingKBlocks(player);
 		if(kb != null){
 			//walk into a killer block, get killed fool
 			that.playerDies();
 			kb.setHidden(false);
 		}
-		GM.objectList.checkDotCollisions(player);
+		if(GM.objectList.checkDotCollisions(player)){
+			if(GM.objectList.getNumDots() == 0){
+				//show end platform
+				GM.objectList.noMoreDots();
+			}
+		}
 		GM.particleList.update();
-		
+
 		ticks++;
 		var now = new Date().getTime();
 		timeCount += now - prevTime;

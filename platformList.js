@@ -2,17 +2,8 @@
 GM.platformList = (function(){
 	var that = {};
 	var root = null;//since platforms only have the extra next/prev properties + spikes, I'm going to use Movable objects
-	var endPlatform = null;
+
 	
-
-	function setEnd(p){
-		endPlatform = p;
-	}
-
-	that.noMoreDots = function(){
-		endPlatform.next = root;
-		root = endPlatform;
-	}
 	that.getRoot = function(){
 		return root;//will probably change
 	}
@@ -97,7 +88,6 @@ GM.platformList = (function(){
 		generatePlatform(0,0,600,10);
 		generatePlatform(0,590,600,10);
 
-		setEnd(generatePlatform(140,300,100,10,true));
 	};
 	/** @param m Movable - the object
 	    @param p Movable - the platform
