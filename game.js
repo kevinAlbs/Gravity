@@ -262,12 +262,16 @@ GM.game = (function(){
 
 		checkCollisions();
 		var movementDebug = true;
+		var flip = 1;
+		if(gravSwitch == 2){
+			flip = -1;
+		}
 		if(!movementPaused){
 			if(keys.r){
-				player.movePerp(1);
+				player.movePerp(1 * flip);
 			}
 			else if(keys.l){
-				player.movePerp(-1);
+				player.movePerp(-1 * flip);
 			}
 			else{
 				player.unMovePerp();
@@ -309,15 +313,18 @@ GM.game = (function(){
 		//update everything
 		player.update();
 		GM.viewport.update(player.getX(), player.getY());
-
+		GM.objectList.update();
 		paint();
 		
 		//now that update has run, set all key presses to false
 		keys.zp = false;
 
-		if(GM.objectList.collidingKBlocks(player) != null){
+		var kb = GM.objectList.collidingKBlocks(player);
+		if(kb != null){
 			console.log("DEAD");
+			kb.setHidden(false);
 		}
+		GM.objectList.checkDotCollisions(player);
 		GM.particleList.update();
 		
 		ticks++;
