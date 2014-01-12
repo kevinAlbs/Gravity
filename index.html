@@ -1,0 +1,58 @@
+<html>
+<head>
+	<title>Whatever man</title>
+	<link href="style.css?v2" rel="stylesheet" type="text/css" />
+	<style>
+	</style>
+</head>
+<body>
+<div id="container">
+	<div id="screen-loading" class="screen no-highlight">
+		<h2>Loading...</h2>
+	</div>
+	<div id="screen-gameplay" class="screen no-highlight">
+		<canvas id="mycanvas" width="1000" height="600"></canvas>
+	</div>
+</div>
+<!--
+<footer>
+	Developed by <a href="http://kevinalbs.com" target="_blank" title="View Kevin Albertson's Portfolio">Kevin Albertson</a><br/>
+	View source or contribute on <a href="" target="_blank" title="View GitHub repository">GitHub</a>
+</footer>
+-->
+<p id="debug"></p>
+<script>
+	var GM = {}; //mediator for gameplay, screens, dependency loading
+	GM.debug = true;
+	//I don't quite like the sequential file loading, but it'll do for now
+	//Also, the naming scheme is Capital first for class, lowercase for singleton (just object)
+</script>
+
+<script src="data.js"></script>
+<script src="utils.js"></script>
+<script src="GM.js"></script>
+<script src="Screen.js"></script>
+<script src="GameScreen.js"></script>
+<script src="LoadingScreen.js"></script>
+<script src="Paintable.js"></script>
+<script src="Animation.js"></script>
+<script src="AnimationSet.js"></script>
+<script src="Movable.js"></script>
+<script src="Mob.js"></script>
+<script src="Person.js"></script>
+<script src="Player.js"></script>
+<script src="game.js"></script>
+<script src="viewport.js"></script>
+<script src="Platform.js"></script>
+<script src="platformList.js"></script>
+<script src="particleList.js"></script>
+<script>
+function pageLoaded(){
+	//onces deps are loaded, start game
+	GM.switchScreen(new LoadingScreen(new GameScreen()));
+}
+window.addEventListener("load", pageLoaded);
+</script>
+
+</body>
+</html>

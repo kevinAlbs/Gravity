@@ -1,0 +1,447 @@
+	
+/*
+ * @class game
+ * singleton
+ * contains game logic
+ * acts as mediator for all game classes
+ */
+GM.game = (function(){
+	var that = {};
+	that.delta = 0;	
+	var	paused= false, //if true, it will still update, but not run anything
+		movementPaused = false,//used for cutscenes, stops user movment
+		started= false, //if false it won't keep updating, set to true on the first init
+		timer= null,
+		fps= 30,
+		curFPS = 0,
+		cWidth, // canvas width
+		cHeight,
+		mapWidth, //map width (in tens)
+		ctx,
+		ctxout,
+		keys= {
+			w: false,
+			a: false,
+			s: false,
+			dk: false, //d key (d taken)
+			l: false, //left
+			r: false, //right
+			u: false,
+			d: false,
+			sp: false, //space,
+			restart: false
+		},
+		mouse = {
+			pressed: false,
+			x: cWidth,
+			y: cHeight/2
+		},
+		player = null,
+		playerDead = false;
+
+
+	function handleKeyDown(e){
+		console.log(e.which);
+		switch(e.which){
+			case 32:
+			keys.restart = true;
+			e.preventDefault();
+			break;
+
+			case 87:
+			keys.w = true;
+			e.preventDefault();
+			break;
+
+			case 83:
+			keys.s = true;
+			e.preventDefault();
+			break;
+
+			case 65:
+			keys.a = true;
+			e.preventDefault();
+			break;
+
+			case 68:
+			keys.dk = true;
+			e.preventDefault();
+			break;
+
+			case 39:
+			keys.r = true;
+			e.preventDefault();
+			break;
+
+			case 37:
+			keys.l = true;
+			e.preventDefault();
+			break;
+
+			case 38:
+			keys.u = true;
+			e.preventDefault();
+			break;
+
+			case 40:
+			keys.d = true;
+			e.preventDefault();
+			break;
+
+			case 32:
+			keys.sp = true;
+			e.preventDefault();
+			break;
+		}
+	}
+
+	function handleKeyUp(e){
+		switch(e.which){
+			case 32:
+			keys.restart = false;
+			e.preventDefault();
+			break;
+
+			case 87:
+			keys.w = false;
+			e.preventDefault();
+			break;
+
+			case 83:
+			keys.s = false;
+			e.preventDefault();
+			break;
+
+			case 65:
+			keys.a = false;
+			e.preventDefault();
+			break;
+
+			case 68:
+			keys.dk = false;
+			e.preventDefault();
+			break;
+
+			case 39:
+			keys.r = false;
+			e.preventDefault();
+			break;
+
+			case 37:
+			keys.l = false;
+			e.preventDefault();
+			break;
+
+			case 38:
+			keys.u = false;
+			e.preventDefault();
+			break;
+
+			case 40:
+			keys.d = false;
+			e.preventDefault();
+			break;
+
+			case 32:
+			keys.sp = false;
+			e.preventDefault();
+			break;
+		}
+		return false;
+	}
+	function handleMousemove(e){
+		mouse.x = e.layerX;
+		mouse.y = e.layerY;
+	}
+	function handleMousedown(e){
+		mouse.pressed = true;
+		mouse.x = e.offsetX;
+		mouse.y = e.offsetY;
+	}
+	function handleMouseup(){
+		mouse.pressed = false;
+	}
+
+	//data is exported object from builder
+	function buildFromData(data){
+		GM.platformList.importPlatforms(data.platforms);
+	}
+
+
+	function init(){
+		var cnv = document.getElementById("mycanvas");
+		ctx = cnv.getContext("2d");
+		ctx.strokeStyle = "#00F";
+
+		//ctx.webkitImageSmoothingEnabled = false;
+		cWidth = cnv.width;
+		cHeight = cnv.height;
+		mapWidth = 50000;//in blocks
+		playerDead = false;
+		won = false;
+
+		if(GM.data.hasOwnProperty("builder")){
+			//builder debugging, import data
+			buildFromData(GM.data.builder.output);
+			player = new Player();
+			player.setX(GM.data.builder.output.playerX);
+			player.setY(GM.data.builder.output.playerY);
+		}
+		else{
+			GM.platformList.generatePlatforms(10);
+			player = new Player();
+		}
+
+		GM.viewport.init(cWidth, cHeight, mapWidth);
+		that.p = player;
+		paused = false;
+		started = true;
+		requestAnimationFrame(update);//start updating process
+	}
+
+	//called to clean up objects/listeners before restarting
+	//this can safely be called even if the game is already destroyed
+	function destroy(){
+		paused = true;
+		player = null;
+		GM.platformList.destroy();
+	}
+	function checkCollisions(){
+
+	}
+	var gravSwitch = 1;
+	var gravSwitchLock = false;
+	function switchGravity(val){
+		if(gravSwitchLock){return;}
+		gravSwitchLock = val;//only this val will unlock
+		gravSwitch = val;
+		if(val == 1){
+			//up
+			player.setGrav(0,-.00134);
+		}
+		else if(val == 2){
+			player.setGrav(.00134, 0);
+		}
+		else if(val == 3){
+			player.setGrav(0,.00134);
+		}
+		else if(val == 4){
+			//left
+			player.setGrav(-.00134, 0);
+		}
+	}
+	function unlockSwitchGrav(val){
+		if(val == gravSwitchLock){
+			gravSwitchLock = false;
+		}
+	}
+	var d = new Date();
+	var ticks = 0;
+	var timeCount = 0;
+	var prevTime = null;
+
+	function update(timestamp){
+		if(playerDead){
+			//check if they are pressing r
+			if(keys.restart){
+				that.startGame();
+			}
+		}
+		if(prevTime == null || paused){
+			//continue to update, but do nothing
+			prevTime =  timestamp;
+			requestAnimationFrame(update);
+			return;
+		}
+
+		var newTime = timestamp;
+		GM.game.delta = newTime - prevTime;
+		prevTime = newTime;
+
+
+		checkCollisions();
+		var movementDebug = true;
+		if(!movementPaused){
+			if(keys.r){
+				player.move(1, gravSwitch);
+			}
+			else if(keys.l){
+				player.move(-1, gravSwitch);
+			}
+			else{
+				player.unMove(gravSwitch);
+			}
+			if(keys.u){
+				player.jump();
+			}
+			else{
+				player.unjump();
+			}
+			if(keys.w){
+				switchGravity(1);
+			}
+			else{
+				unlockSwitchGrav(1);
+			}
+			if(keys.a){
+				switchGravity(4);
+			}
+			else{
+				unlockSwitchGrav(4);
+			}
+			if(keys.dk){
+				switchGravity(2);
+			}
+			else{
+				unlockSwitchGrav(2);
+			}
+			if(keys.s){
+				switchGravity(3);
+			}
+			else{
+				unlockSwitchGrav(3);
+			}
+		}
+		else{
+			player.moveX(0);//no moving during cutscenes!
+		}
+		//update everything
+		player.update();
+		GM.viewport.update(player.getX(), player.getY());
+
+		paint();
+		
+		//now that update has run, set all key presses to false
+		keys.zp = false;
+
+		GM.particleList.update();
+		
+		ticks++;
+		var now = new Date().getTime();
+		timeCount += now - prevTime;
+		if(timeCount > 1000){
+			curFPS = ticks;
+			ticks = 0;
+			timeCount = 0;
+		}
+
+		
+		requestAnimationFrame(update);
+	};
+	
+	function paint(){
+		ctx.save();
+		ctx.clearRect(0,0,cWidth, cHeight);
+		if(gravSwitch == 1){
+			//ctx.translate(0,cHeight);
+			//ctx.scale(1,-1);
+		}
+		else{
+		}
+
+		GM.viewport.paint(ctx);
+		//paint player
+		player.paint(ctx);
+
+		for(var p = GM.platformList.getRoot(); p != null; p = p.next){
+			p.paint(ctx);
+		}
+		GM.particleList.paint(ctx);
+		ctx.restore();
+
+	};
+
+	/* public methods */
+	/* deps is defined as an array of objects describing media type:
+	[{
+		type: 'img',
+		src: 'filepath.jpg',
+		name: 'spritesheet'
+	}]
+	name is final name in GM.deps
+	*/
+	that.loadDependencies = function(deps, callback){
+		var total = deps.length, loadedTotal = 0;
+		GM.deps = {};
+		function loaded(){
+			loadedTotal++;
+			if(loadedTotal >= total){
+				//finished loading all dependencies
+				callback.call(window);
+			}
+		}
+		if(deps.length == 0){
+			loaded();
+		}
+		//load each one
+		for(var i = 0; i < deps.length; i++){
+			switch(deps[i].type){
+				case "img":
+					//load image
+					var img = new Image();
+					img.onload = loaded;
+					img.src = deps[i].src;
+					GM.deps[deps[i].name] = img;
+				break;
+				case "sound":
+					var aud = new Audio();
+					aud.preload = "auto";
+					aud.addEventListener("canplaythrough", loaded, true);
+					aud.src = deps[i].src;
+					GM.deps[deps[i].name] = aud;
+				break;
+			}
+		}
+	};
+
+	//add or remove all listeners
+	that.toggleListeners = function(val){
+		var fn = val + "EventListener";
+		var cnv = document.getElementById("mycanvas");
+		document[fn]("keydown",handleKeyDown, false);
+		document[fn]("keyup",handleKeyUp, false);
+		cnv[fn]("mousedown", handleMousedown, false);
+		cnv[fn]("mouseup", handleMouseup, false);
+		cnv[fn]("mousemove", handleMousemove, false);
+	};
+
+	that.startGame = function(){
+		console.log("Game started");
+		destroy();
+		init();
+	};
+
+	
+	that.getXOffset = function(){
+		return GM.viewport.getXOffset();
+	};
+
+	that.getCHeight = function(){return cHeight;}
+	that.getCWidth = function(){return cWidth;}
+	that.getMapWidth = function(){return mapWidth * 10;}
+	that.inScreen = function(obj){
+		return GM.viewport.inScreen(obj);
+	}
+	that.getPlayerWalking = function(){return player.getWalkingSpeed();};
+	that.getPlayerXVel = function(){return player.getXVel();}
+	that.getPlayerX = function(){return player.getX();};
+	that.getPlayerY = function(){return player.getY();};
+	that.getPlayerPlatform = function(){return player.whichPlatform();};
+	that.getPlayerWidth = function(){return player.getWidth();};
+	that.getPlayerHeight = function(){return player.getHeight();};
+	that.generateParticles = function(stg){
+		//to be implemented
+		GM.particleList.generateParticles(stg);	
+	};
+
+	that.handlePlayerDeath = function(){
+		if(hudScore > hudBestScore){
+			hudBestScore = hudScore;
+		}
+		paused = true;
+		playerDead = true;
+		hudStat = "YOU DIED :(<br/>PRESS SPACE TO RESTART";
+		that.updateHUD();
+	}
+	return that;
+}());
