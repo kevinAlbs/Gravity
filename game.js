@@ -188,6 +188,7 @@ GM.game = (function(){
 		}
 		else{
 			GM.platformList.generatePlatforms(10);
+			GM.objectList.generateObjects();
 			player = new Player();
 		}
 
@@ -204,6 +205,7 @@ GM.game = (function(){
 		paused = true;
 		player = null;
 		GM.platformList.destroy();
+		GM.objectList.destroy();
 	}
 	function checkCollisions(){
 
@@ -313,6 +315,9 @@ GM.game = (function(){
 		//now that update has run, set all key presses to false
 		keys.zp = false;
 
+		if(GM.objectList.collidingKBlocks(player) != null){
+			console.log("DEAD");
+		}
 		GM.particleList.update();
 		
 		ticks++;
@@ -341,10 +346,8 @@ GM.game = (function(){
 		GM.viewport.paint(ctx);
 		//paint player
 		player.paint(ctx);
-
-		for(var p = GM.platformList.getRoot(); p != null; p = p.next){
-			p.paint(ctx);
-		}
+		GM.platformList.paint(ctx);
+		GM.objectList.paint(ctx);
 		GM.particleList.paint(ctx);
 		ctx.restore();
 

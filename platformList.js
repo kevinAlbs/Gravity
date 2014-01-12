@@ -9,7 +9,11 @@ GM.platformList = (function(){
 		return root;//will probably change
 	}
 
-
+	that.paint = function(ctx){
+		for(var p = root; p != null; p = p.next){
+			p.paint(ctx);
+		}
+	}
 	//WARNING: extremely inefficient and should only ever be used during start-up for enemy initialization
 	that.getPlatformBelow = function(o){
 		for(var ptr = root; ptr != null; ptr = ptr.next){
@@ -77,9 +81,11 @@ GM.platformList = (function(){
 	This will generate platforms on the end of the linked list
 	*/
 	that.generatePlatforms = function(num, difficulty){
+
 		generatePlatform(100,200,100,10);
 		generatePlatform(100,150,10,50);
 		generatePlatform(50,400,500,10);
+		generatePlatform(300,100,200,10);
 
 		generatePlatform(0,0,10,600);
 		generatePlatform(590,0,10,600);
@@ -97,7 +103,7 @@ GM.platformList = (function(){
 		var pcx = p.getX() + phw;
 		var sDiff = mcx - pcx; //signed difference
 		var aDiff = Math.abs(sDiff);
-		if(aDiff < mhw + phw + (Math.abs(m.getXVel()) * GM.game.delta) + 2){
+		if(aDiff < mhw + phw + (Math.abs(m.getXVel()) * GM.game.delta) + 1){
 			return 0;
 		}
 		else{
@@ -116,7 +122,7 @@ GM.platformList = (function(){
 		var pcy = p.getY() + phh;
 		var sDiff = mcy - pcy; //signed difference
 		var aDiff = Math.abs(sDiff);
-		if(aDiff < mhh + phh + (Math.abs(m.getYVel()) * GM.game.delta) + 2){
+		if(aDiff < mhh + phh + (Math.abs(m.getYVel()) * GM.game.delta) + 1){
 			return 0;
 		}
 		else{

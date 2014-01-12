@@ -11,6 +11,7 @@ Paintable.prototype.setX = function(val){
 		this._x = val;
 	}
 };
+Paintable.prototype.update = function(){};
 Paintable.prototype.getX = function(){return this._x;}
 Paintable.prototype.getY = function(){return this._y;}
 Paintable.prototype.getWidth = function(){return this._width;}

@@ -28,10 +28,14 @@ function Player(){
 				this._walking = false;
 			}
 			if(grav == 1 || grav == 3){
-				this._xVel = dir * this._walkingSpeed;
+				if((dir == -1 && this._xVel > dir * this._walkingSpeed) || (dir == 1 && this._xVel < dir * this._walkingSpeed)){
+					this._xVel += dir * this._walkingSpeed / 8;
+				}
 			}
 			else{
-				this._yVel = dir * this._walkingSpeed;	
+				if((dir == -1 && this._yVel > dir * this._walkingSpeed) || (dir == 1 && this._yVel < dir * this._walkingSpeed)){
+					this._yVel += dir * this._walkingSpeed / 8;
+				}
 			}
 		}
 	};
@@ -44,7 +48,7 @@ function Player(){
 				this._xVel = 0;
 			}
 			else if(ab > 0){
-				this._xVel *= .75;
+				this._xVel *= .85;
 			}
 		}
 		else{
@@ -54,7 +58,7 @@ function Player(){
 				this._yVel = 0;
 			}
 			else if(ab > 0){
-				this._yVel *= .75;
+				this._yVel *= .85;
 			}
 		}
 	}
