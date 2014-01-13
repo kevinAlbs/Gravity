@@ -1,7 +1,9 @@
 <html>
 <head>
 	<title>This is no Game</title>
+	<link href='http://fonts.googleapis.com/css?family=Sintony:400,700' rel='stylesheet' type='text/css'>
 	<link href="style.css?v2" rel="stylesheet" type="text/css" />
+	
 	<style>
 	</style>
 </head>
@@ -13,6 +15,20 @@
 	</div>
 	<div id="screen-gameplay" class="screen no-highlight">
 		<canvas id="mycanvas" width="600" height="600"></canvas>
+		<div id="hud" class="cf">
+			<p>Gravity Switches: <span id="grav_switch_amt">0</span></p>
+			<p>Stage <span id="stage">1</span></p>
+			<p>Press space to restart</p>
+		</div>
+	</div>
+	<div id="screen-win" class="screen no-highlight">
+		<h2>Congratulations</h2>
+		<p>You completed all ten stages.</p>
+		<p>However, it is unfortunate that this is not a game.</p>
+		<br/>
+		<h3>Credits</h3>
+		<p><b>Development</b> <a href="http://kevinalbs.com" target="_blank" title="Visit his portfolio">Kevin Albertson</a></p>
+		<p><b>Idea</b> Kaitlin Kohut</p>
 	</div>
 </div>
 <!--
@@ -35,6 +51,7 @@
 <script src="Screen.js"></script>
 <script src="GameScreen.js"></script>
 <script src="LoadingScreen.js"></script>
+<script src="WinScreen.js"></script>
 <script src="Paintable.js"></script>
 <script src="Animation.js"></script>
 <script src="AnimationSet.js"></script>

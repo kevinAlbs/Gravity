@@ -110,6 +110,14 @@ GM.objectList = (function(){
 		var prev = null;
 		for(var n = dotroot; n != null; n = n.next){
 			if(n.collidingWith(p)){
+				GM.game.generateParticles({
+					x:n.getX() + n.getWidth()/2,
+					y:n.getY() + n.getHeight()/2,
+					color: "#4A77FF",
+					init_speed_x_variance: .1,
+					init_speed_y_variance: .1,
+					num: 10
+				})
 				if(prev == null){
 					dotroot = dotroot.next;
 				}
