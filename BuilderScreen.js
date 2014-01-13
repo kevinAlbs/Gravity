@@ -370,7 +370,7 @@ function BuilderScreen(){
 		//GM.switchScreen(new GameScreen());
 		container.draggable({axis: 'x'}).draggable("disable");
 		$(".player").draggable({containment: container, snap: ".platform", snapMode: "outer"});
-		$(".platform.init").draggable({containment: container}).resizable({handles: "e,w", containment: container });
+		$(".end").draggable({containment: container}).resizable({handles: "n,s,w,e", containment: container});
 		
 	};
 	this.show = function(){
