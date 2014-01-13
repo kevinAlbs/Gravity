@@ -34,9 +34,7 @@
 		position: relative;
 		border: 1px #000 solid;
 		background: #FFF;
-	}
-	.screen{
-		
+		position: relative;
 	}
 	footer{
 		width: 1000px;
@@ -51,6 +49,9 @@
 	}
 	.screen{
 		display: none;
+		z-index: 5;
+		background: #FFF;
+		position: relative;
 	}
 	#screen-gameplay{
 		position: relative;
@@ -96,10 +97,57 @@
 		width: 120px;
 		display: inline-block;
 	}
-	#container #instructions{
+	#screen-menu{
+		height: 600px;
+		background: url("images/cover.png");
+	}
+	#screen-menu h1{
+		font-size: 96px;
+	}
+	#screen-menu ul{
+		list-style-type: none;
 		position: absolute;
-		left: -201px;
-		width: 180px;
+		bottom: 100px;
+		left: 20px;
+	}
+	#screen-menu li{
+		cursor: pointer;
+		font-size: 24px;
+	}
+	#screen-menu li:hover{
+		color: #0008FF;
+	}
+	#container #instructions #show_hide{
+		position: absolute;
+		display: block;
+		width: 20px;
+		height: 20px;
+		text-align: center;
+		left: -21px;
+		top: 10px;
+		color: #000;
+		background: #DFD;
+		border-top: 1px black solid;
+		border-bottom: 1px black solid;
+		border-left: 1px black solid;
+		text-decoration: none;
+	}
+	#container #instructions #show_hide:hover{
+		background: #AFA;
+	}
+	#container #instructions p{
+		font-size: 9pt;
+		margin-bottom: 20px;
+	}
+	#container #instructions{
+		z-index: 1;
+		position: absolute;
+		left: -91px;
+		width: 70px;
+		top: -1px;
 		padding: 10px;
-		background: rgba(255,255,255,.8);
+		background: #EEE;
+		border-top: 1px black solid;
+		border-bottom: 1px black solid;
+		border-left: 1px black solid;
 	}

@@ -14,10 +14,15 @@ function Player(){
 	this._hasLongJump = true;
 
 	this.name = "Kaitlin";
+
+	var anim = new AnimationSet(GM.data.animation_sets.Player);
+	anim.switchAnimation("walking");
 		//dir must be -1, 0, or 1
 	this.movePerp = function(dir){
+
 		var grav = GM.game.getGravSwitch();
 		if(!this._dead){
+			anim.switchAnimation("walking");
 			if(dir != 0){
 				if(!this._ducking){
 					this._walking = true;
@@ -40,6 +45,7 @@ function Player(){
 		}
 	};
 	this.unMovePerp = function(){
+		anim.switchAnimation("idle");
 		var grav = GM.game.getGravSwitch();
 		if(grav == 1 || grav == 3){
 			var ab = Math.abs(this._xVel);
@@ -162,8 +168,20 @@ function Player(){
 
 	this.paint = function(ctx){
 		if(!this._dead){
-			ctx.fillStyle = "#000";
-			Player.prototype.paint.call(this, ctx);
+			//ctx.fillStyle = "#000";
+			//Player.prototype.paint.call(this, ctx);
+			var grav = GM.game.getGravSwitch();
+			var rot = 0;
+			if(grav == 1){
+				rot = Math.PI;
+			}
+			else if(grav == 2){
+				rot = 3 * Math.PI/2;
+			}
+			else if(grav == 4){
+				rot = Math.PI/2;
+			}
+			anim.drawFrame(this._x,this._y,this._width,this._height,ctx, rot, this._width/2, this._height/2);
 		}
 	};
 

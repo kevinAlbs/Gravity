@@ -12,10 +12,23 @@
 <div id="container">
 	<div id="instructions">
 		<a href="#" id="show_hide">&raquo;</a>
-		How to play:
+		<img src="images/wasd.png" alt="WASD"/>
+		<p>Switch gravity</p>
+
+		<img src="images/arrows.png" alt="Arrow keys"/>
+		<p>Move</p>
 	</div>
 	<div id="screen-loading" class="screen no-highlight">
 		<h2>Loading...</h2>
+	</div>
+	<div id="screen-menu" class="screen no-highlight">
+		<div class="inner">
+			<h1>GRAVITY</h1>
+			<ul>
+				<li id="btn-play">Play</li>
+				<!--<li id="btn-high">High Scores</li>-->
+			</ul>
+		</div>
 	</div>
 	<div id="screen-gameplay" class="screen no-highlight">
 		<canvas id="mycanvas" width="600" height="600"></canvas>
@@ -29,6 +42,7 @@
 		<h2>Congratulations</h2>
 		<p>You completed all ten stages.</p>
 		<p>However, it is unfortunate that this is not a game.</p>
+		<p>You finished with <strong id="final_death_count"></strong> deaths</p>
 		<br/>
 		<h3>Credits</h3>
 		<p><b>Development</b> <a href="http://kevinalbs.com" target="_blank" title="Visit his portfolio">Kevin Albertson</a></p>
@@ -53,6 +67,7 @@
 <script src="utils.js"></script>
 <script src="GM.js"></script>
 <script src="Screen.js"></script>
+<script src="MenuScreen.js"></script>
 <script src="GameScreen.js"></script>
 <script src="LoadingScreen.js"></script>
 <script src="WinScreen.js"></script>
@@ -73,9 +88,26 @@
 <script src="particleList.js"></script>
 <script src="viewport.js"></script>
 <script>
+
+var sh = document.getElementById("show_hide"),
+ins = document.getElementById("instructions"),
+showing = true;
+sh.addEventListener("click", function(){
+	showing = !showing;
+	if(!showing){
+		ins.style.width = "0px";
+		ins.style.left = "0px";
+		sh.innerHTML = "&laquo;";
+	}
+	else{
+		ins.style.width = "70px";
+		ins.style.left = "-91px";	
+		sh.innerHTML = "&raquo;";
+	}
+});
 function pageLoaded(){
 	//onces deps are loaded, start game
-	GM.switchScreen(new LoadingScreen(new GameScreen()));
+	GM.switchScreen(new LoadingScreen(new MenuScreen()));
 }
 window.addEventListener("load", pageLoaded);
 </script>

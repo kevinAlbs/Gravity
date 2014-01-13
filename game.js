@@ -49,7 +49,8 @@ GM.game = (function(){
 		hud = {
 			gravitySwitches: document.getElementById("grav_switch_amt"),
 			stage: document.getElementById("stage"),
-			deathCount: document.getElementById("death_count")
+			deathCount: document.getElementById("death_count"),
+			deathCountFinal: document.getElementById("final_death_count")
 		},
 		current_stage = 0,
 		transition_size = 0;
@@ -296,6 +297,7 @@ GM.game = (function(){
 		if(keys.restart){
 			if(!restartLock){
 				restartLock = true;
+				deathCount++;
 				that.startGame();
 				console.log("Starting game");
 			}
@@ -506,6 +508,7 @@ GM.game = (function(){
 		hud.stage.innerHTML = (current_stage+1);
 		hud.deathCount.innerHTML = (deathCount);
 		hud.gravitySwitches.innerHTML = numGravSwitches;
+		hud.deathCountFinal.innerHTML = (deathCount);
 	}
 
 	return that;

@@ -42,16 +42,10 @@ function Animation(frames){
 		the image will be centered around this rectangular area
 		dir - the direction the mob is facing (1 for right, -1 for left), image will be flipped to face that direction
 	*/
-	this.drawFrame = function(x,y,width,height,ctx, dir, rot, rx, ry, clipWidth, clipHeight){
+	this.drawFrame = function(x,y,width,height,ctx, rot, rx, ry){
 		var f = this._frames[this._curFrame];
 		var flip = 1, offset = 0;
 		ctx.save();
-		if(dir == -1){
-			ctx.scale(-1, 1);
-			flip = -1;
-			offset = -1 * width;
-		}
-		
 		ctx.translate(Math.round(flip * x + offset),Math.round(y));
 		if(rot){
 			ctx.translate(Math.round(rx), Math.round(ry));
@@ -60,17 +54,8 @@ function Animation(frames){
 		}
 		var w = f.width,
 			h = f.height;
-		if(clipWidth){
-			w = clipWidth;
-		}
-		if(clipHeight){
-			h = clipHeight;
-		}
 		ctx.drawImage(GM.deps.spritesheet, Math.round(f.x), Math.round(f.y), w, h, 0, 0, w, h);
 		//ctx.fillRect(0,0, Math.round(f.width), Math.round(f.height));
-		if(dir == -1){
-			
-		}
 		ctx.restore();
 		this._updateFrame();
 	};
