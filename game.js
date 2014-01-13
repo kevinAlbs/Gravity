@@ -9,7 +9,7 @@ GM.game = (function(){
 	var that = {};
 	that.debug = {
 		noDie : true,
-		stageTest: !true
+		stageTest: true
 	};
 	that.delta = 0;	
 	var	paused= false, //if true, it will still update, but not run anything
@@ -45,9 +45,11 @@ GM.game = (function(){
 		stageEnd = false,
 		numGravSwitches = 100,
 		restartLock = false,
+		deathCount = 0,
 		hud = {
 			gravitySwitches: document.getElementById("grav_switch_amt"),
-			stage: document.getElementById("stage")
+			stage: document.getElementById("stage"),
+			deathCount: document.getElementById("death_count")
 		},
 		current_stage = 0,
 		transition_size = 0;
@@ -393,9 +395,10 @@ GM.game = (function(){
 		ctx.clearRect(0,0,cWidth, cHeight);
 		GM.viewport.paint(ctx);
 		//paint player
-		player.paint(ctx);
+		
 		GM.platformList.paint(ctx);
 		GM.objectList.paint(ctx);
+		player.paint(ctx);
 		GM.particleList.paint(ctx);
 		ctx.restore();
 
@@ -487,7 +490,9 @@ GM.game = (function(){
 	that.playerDies = function(){
 		if(that.debug.noDie){return;}
 		if(!player.isDead()){
+			deathCount++;
 			player.getKilled();
+			that.updateHUD();
 		}
 	};
 
@@ -499,6 +504,7 @@ GM.game = (function(){
 
 	that.updateHUD = function(){
 		hud.stage.innerHTML = (current_stage+1);
+		hud.deathCount.innerHTML = (deathCount);
 		hud.gravitySwitches.innerHTML = numGravSwitches;
 	}
 

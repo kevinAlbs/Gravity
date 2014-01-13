@@ -10,6 +10,10 @@
 <body>
 	<p id="debug"></p>
 <div id="container">
+	<div id="instructions">
+		<a href="#" id="show_hide">&raquo;</a>
+		How to play:
+	</div>
 	<div id="screen-loading" class="screen no-highlight">
 		<h2>Loading...</h2>
 	</div>
@@ -17,8 +21,8 @@
 		<canvas id="mycanvas" width="600" height="600"></canvas>
 		<div id="hud" class="cf">
 			<p>Gravity Switches: <span id="grav_switch_amt">0</span></p>
+			<p>Deaths: <span id="death_count">0</span></p>
 			<p>Stage <span id="stage">1</span></p>
-			<p>Press space to restart</p>
 		</div>
 	</div>
 	<div id="screen-win" class="screen no-highlight">

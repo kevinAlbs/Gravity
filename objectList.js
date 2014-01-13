@@ -63,6 +63,11 @@ GM.objectList = (function(){
 			ctx.fillStyle = "#ED3939";
 			endBlock.paint(ctx);
 		}
+		else{
+			ctx.fillStyle = "#E3AFAF";
+			endBlock.paint(ctx);
+
+		}
 	};
 	that.update = function(){
 		for(var n = lgroot; n != null; n = n.next){

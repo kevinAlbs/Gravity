@@ -96,3 +96,10 @@
 		width: 120px;
 		display: inline-block;
 	}
+	#container #instructions{
+		position: absolute;
+		left: -201px;
+		width: 180px;
+		padding: 10px;
+		background: rgba(255,255,255,.8);
+	}

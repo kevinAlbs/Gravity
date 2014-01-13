@@ -162,6 +162,7 @@ function Player(){
 
 	this.paint = function(ctx){
 		if(!this._dead){
+			ctx.fillStyle = "#000";
 			Player.prototype.paint.call(this, ctx);
 		}
 	};

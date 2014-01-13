@@ -164,8 +164,8 @@
 		<canvas id="mycanvas" width="600" height="600"></canvas>
 		<div id="hud" class="cf">
 			<p>Gravity Switches: <span id="grav_switch_amt">0</span></p>
+			<p>Deaths: <span id="death_count">0</span></p>
 			<p>Stage <span id="stage">1</span></p>
-			<p>Press space to restart</p>
 		</div>
 	</div>
 	<div id="screen-win" class="screen no-highlight">
@@ -223,7 +223,7 @@
 <script src="particleList.js"></script>
 <script src="viewport.js"></script>
 <script>
-//fileInput = GM.data.stages[1];
+fileInput = GM.data.stages[0];
 var bScreen = new BuilderScreen(),
 	gScreen = new GameScreen();
 var flag = false;
