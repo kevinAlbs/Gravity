@@ -8,7 +8,7 @@
 GM.game = (function(){
 	var that = {};
 	that.debug = {
-		noDie : true
+		noDie : false
 	};
 	that.delta = 0;	
 	var	paused= false, //if true, it will still update, but not run anything

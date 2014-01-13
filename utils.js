@@ -16,11 +16,13 @@ GM.utils = {
 	},
 	//replaces adds any properties to o1 from o2 which are not in o1
 	extend_obj: function(o1, o2){
+		if(!o2){return o1;}
 		for(p in o2){
 			if(!o1.hasOwnProperty(p)){
 				o1[p] = o2[p];
 			}
 		}
+		return o1;
 	}
 };
 

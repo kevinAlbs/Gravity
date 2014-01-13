@@ -19,6 +19,7 @@ GM.data = {
 	animation_sets:{
 	},
 	stages:[
-		{"platforms":[{"x":0,"y":0,"width":600,"height":1},{"x":0,"y":0,"width":1,"height":600},{"x":0,"y":599,"width":600,"height":1},{"x":599,"y":0,"width":1,"height":600},{"x":503,"y":184,"width":97,"height":10},{"x":503,"y":135,"width":97,"height":10},{"x":503,"y":194,"width":10,"height":100}],"kblocks":[{"x":156,"y":69,"width":443,"height":10,"hidden":false},{"x":156,"y":77,"width":10,"height":283,"hidden":false}],"laserguns":[],"dots":[{"x":211,"y":533},{"x":552,"y":237}],"playerX":41,"playerY":583,"end":{"x":588,"y":144,"width":11,"height":40}}
+		{"platforms":[{"x":0,"y":0,"width":600,"height":1},{"x":0,"y":0,"width":1,"height":600},{"x":0,"y":599,"width":600,"height":1},{"x":599,"y":0,"width":1,"height":600},{"x":0,"y":0,"width":600,"height":1},{"x":0,"y":0,"width":1,"height":600},{"x":0,"y":599,"width":600,"height":1},{"x":599,"y":0,"width":1,"height":600},{"x":503,"y":184,"width":97,"height":10},{"x":503,"y":135,"width":97,"height":10},{"x":503,"y":194,"width":10,"height":100}],"kblocks":[{"x":156,"y":69,"width":443,"height":10,"hidden":false},{"x":156,"y":77,"width":10,"height":283,"hidden":true}],"laserguns":[{"x":262,"y":256,"dx":229,"dy":1,"timeOn":1000,"timeOff":2000}],"dots":[{"x":211,"y":533},{"x":552,"y":237}],"playerX":41,"playerY":583,"end":{"x":588,"y":144,"width":11,"height":40}}
 	]
 }
+

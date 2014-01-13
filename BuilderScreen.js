@@ -111,9 +111,9 @@ function BuilderScreen(){
 
 	}
 	//w is width
-	//d is enemy follow distance
-	function switchTool(t,x,y,w,d){
-		console.log(t);
+	function switchTool(t,x,y,extra){
+//		console.log(t);
+		extra = GM.utils.extend_obj({}, extra);
 		tool = t;
 		$("#toolbar span").html("Tool: " + tool);
 		var btn = $("button[value=" + tool + "]");
@@ -122,7 +122,7 @@ function BuilderScreen(){
 		});
 
 		//if x and y are not defined, put them in corner
-		if(!x){
+		if(typeof x != "number"){
 			x = 100;
 			y = 10;
 		}
@@ -150,8 +150,25 @@ function BuilderScreen(){
 					left: x + "px",
 					top: y + "px"
 				});
+
+				var handle = newObj.find(".handle");
+				var tb = newObj.find("input");
 				newObj.draggable({containment: container});
-				newObj.find(".handle").draggable({containment: container});
+				handle.draggable({containment: container});
+
+				if(extra.dx){
+					handle.css({left: extra.dx + "px"});
+				}
+				if(extra.dy){
+					handle.css({top: extra.dy + "px"});
+				}
+				if(extra.timeOn){
+					var timeVal = extra.timeOn + "";
+					if(extra.timeOff){
+						timeVal += "," + extra.timeOff;
+					}
+					tb.val(timeVal);
+				}
 				selectObj(newObj);
 				container.append(newObj);
 			break;
@@ -160,8 +177,14 @@ function BuilderScreen(){
 					left: x + "px",
 					top: y + "px"
 				});
-				if(d){
-					newObj.find("input[type=text]").val(d).blur();
+				if(extra.hidden){
+					newObj.find("input[type=text]").val("1").blur();
+				}
+				if(extra.width){
+					newObj.css("width", extra.width + "px");
+				}
+				if(extra.height){
+					newObj.css("height", extra.height + "px");
 				}
 				newObj.draggable({containment: container}).resizable({handles: "n,s,e,w", containment: container});
 				selectObj(newObj);
@@ -173,12 +196,15 @@ function BuilderScreen(){
 					left: x + "px",
 					top:  y + "px"
 				});
+
 				if(tool == "vplatform"){
-					w =10;
 					newObj.css("height", "100px");	
 				}
-				if(w){
-					newObj.css("width", w + "px");
+				if(extra.width){
+					newObj.css("width", extra.width + "px");
+				}
+				if(extra.height){
+					newObj.css("height", extra.height + "px");
 				}
 
 				newObj.draggable({containment: container}).resizable({handles: "n,s,e,w", containment: container });
@@ -235,15 +261,6 @@ function BuilderScreen(){
 	}
 	this.importJson = function(obj){
 		console.log(obj);
-		var spikeHeight = 20, //may need to change if enemy/object sizes change
-			ammoHeight = 10,
-			healthHeight = 10;
-
-		var heights = {
-			"spike": 20,
-			"ammo": 10,
-			"health": 10
-		};
 
 		//remove the initial platform
 		$(".platform.init").detach();
@@ -251,17 +268,44 @@ function BuilderScreen(){
 			"left": obj.playerX + "px",
 			"top" : obj.playerY + "px"
 		});
+		$(".end").css({
+			"left": obj.end.x + "px",
+			"top" : obj.end.y + "px",
+			"width" : obj.end.width + "px",
+			"height" : obj.end.height + "px"
+		});
 		for(var i = 0; i < obj.platforms.length; i++){
-			switchTool("platform", obj.platforms[i].x, obj.platforms[i].y,  obj.platforms[i].width);
-			for(var j = 0; j < obj.platforms[i].spikes.length; j++){
-				switchTool("spike", obj.platforms[i].spikes[j].x, obj.platforms[i].y - heights["spike"]);
-			}
-			for(var j = 0; j < obj.platforms[i].pickups.length; j++){
-				switchTool(obj.platforms[i].pickups[j].type, obj.platforms[i].pickups[j].x, obj.platforms[i].y - heights[obj.platforms[i].pickups[j].type]);
-			}
+			var p = obj.platforms[i];
+			var extra = {
+				width: p.width,
+				height: p.height
+			};
+			switchTool("platform", p.x, p.y, extra);
 		}
-		for(var i = 0; i < obj.enemies.length; i++){
-			switchTool(obj.enemies[i].type, obj.enemies[i].x, obj.enemies[i].y, 0, obj.enemies[i].dist);
+		for(var i = 0; i < obj.kblocks.length; i++){
+			var p = obj.kblocks[i];
+			var extra = {
+				hidden: p.hidden,
+				width: p.width,
+				height: p.height
+			};
+			switchTool("kblock", p.x, p.y, extra);
+		}
+		for(var i = 0; i < obj.laserguns.length; i++){
+			var p = obj.laserguns[i];
+			var extra = {
+				dx: p.dx,
+				dy: p.dy,
+				timeOn: p.timeOn,
+				timeOff: p.timeOff,
+				width: p.width,
+				height: p.height
+			};
+			switchTool("lasergun", p.x, p.y, extra);
+		}
+		for(var i = 0; i < obj.dots.length; i++){
+			var d = obj.dots[i];
+			switchTool("dot", d.x, d.y);
 		}
 	}
 
