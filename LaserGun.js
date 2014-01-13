@@ -1,11 +1,11 @@
 function LaserGun(){
 	this._width = 5;
 	this._height = 5;
-	var firing = false,
+	var firing = true,
 		closestT = 1000,
 		closestObj = null,
 		ON_TIME = 1000,
-		OFF_TIME = 2000,
+		OFF_TIME = 1000,
 		PULSATE_TIME = 1000,
 		pulsateTimer = OFF_TIME;
 
@@ -112,6 +112,12 @@ function LaserGun(){
 	this.setTime = function(on,off){
 		ON_TIME = on;
 		OFF_TIME = off;
+		if(firing){
+			pulsateTimer = ON_TIME;
+		}
+		else{
+			pulsateTimer = OFF_TIME;
+		}
 	}
 }
 GM.utils.inherits(LaserGun, Movable);

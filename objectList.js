@@ -31,11 +31,12 @@ GM.objectList = (function(){
 		n.next = kblockroot;
 		kblockroot = n;
 	}
-	function addLG(x,y,dx,dy){
+	function addLG(x,y,dx,dy,on,off){
 		var lg = new LaserGun();
 		lg.setX(x);
 		lg.setY(y);
 		lg.setAngle(dx,dy);
+		lg.setTime(on,off);
 		lg.next = lgroot;
 		lgroot = lg;
 	}
@@ -72,7 +73,7 @@ GM.objectList = (function(){
 		addKBlock(50,100,10,200,true);
 		addDot(300,350);
 		addDot(400,360);
-		addLG(100,100,1,2);
+		addLG(100,100,1,2,1000,1000);
 		addEnd(100,340,10,10);
 	}
 	that.getKBlockRoot  = function(){
@@ -87,6 +88,15 @@ GM.objectList = (function(){
 		for(var i = 0; i < data.dots.length; i++){
 			var d = data.dots[i];
 			addDot(d.x,d.y);
+		}
+		for(var i = 0; i < data.laserguns.length; i++){
+			var lg = data.laserguns[i];
+			addLG(lg.x,lg.y,lg.dx,lg.dy,lg.timeOn,lg.timeOff);
+		}
+		var e = data.end;
+		addEnd(e.x,e.y,e.width,e.height);
+		if(numDots == 0){
+			that.noMoreDots();
 		}
 	}
 	that.getNumDots = function(){
@@ -123,6 +133,11 @@ GM.objectList = (function(){
 	};
 	that.destroy = function(){
 		kblockroot = null;
+		dotroot = null;
+		lgroot = null;
+		endBlock = null;
+		numDots = 0;
+		stageEnd = false;
 	};
 
 	return that;

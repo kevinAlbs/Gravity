@@ -12,6 +12,7 @@ function BuilderScreen(){
 		"k": "kblock",
 		"o": "dot",
 		"d": "delete",
+		"l": "lasergun",
 		"e": "export"
 	};
 
@@ -76,7 +77,7 @@ function BuilderScreen(){
 		else{
 			selectObj($(e.currentTarget));
 		}
-		if(tool == "delete" && !$(e.currentTarget).hasClass("player")){
+		if(tool == "delete" && !$(e.currentTarget).hasClass("player") && !$(e.currentTarget).hasClass("end")){
 			$(e.currentTarget).detach();
 		}
 	}
@@ -144,12 +145,13 @@ function BuilderScreen(){
 				selectObj(newObj);
 				container.append(newObj);
 			break;
-			case "health":
-				var newObj = $("<div></div>").addClass("health object").css({
+			case "lasergun":
+				var newObj = $("<div><div class='handle'><input type='text' /></div>").addClass("lasergun object").css({
 					left: x + "px",
 					top: y + "px"
 				});
-				newObj.draggable({containment: container, snap: ".platform", snapMode: "outer"});
+				newObj.draggable({containment: container});
+				newObj.find(".handle").draggable({containment: container});
 				selectObj(newObj);
 				container.append(newObj);
 			break;
@@ -162,15 +164,6 @@ function BuilderScreen(){
 					newObj.find("input[type=text]").val(d).blur();
 				}
 				newObj.draggable({containment: container}).resizable({handles: "n,s,e,w", containment: container});
-				selectObj(newObj);
-				container.append(newObj);
-			break;
-			case "spike":
-				var newObj = $("<div></div>").addClass("spike object").css({
-					left: x + "px",
-					top: y + "px"
-				});
-				newObj.draggable({containment: container, snap: ".platform", snapMode: "outer"});
 				selectObj(newObj);
 				container.append(newObj);
 			break;
@@ -303,6 +296,42 @@ function BuilderScreen(){
 			});
 		}
 
+		var laserguns = [];
+		var lgs = $(".lasergun");
+		for(var i = 0; i < lgs.size(); i++){
+			var lg = $(lgs.get(i));
+			var hand = lg.find(".handle");
+			var x = lg.position().left,
+				y = lg.position().top,
+				dx = hand.position().left,
+				dy = hand.position().top,
+				on, off;
+			var text = lg.find("input").val().trim();
+			var parts = text.split(",");
+			if(parts.length == 0 || parts[0] == ""){
+				on = parseInt(text);
+			}
+			else{
+				on = parseInt(parts[0]);
+				off = parseInt(parts[1]);
+			}
+			if(isNaN(on) || on == null){
+				on = 1000;
+			}
+			if(isNaN(off) || off == null){
+				off = 1000;
+			}
+
+			laserguns.push({
+				x: x,
+				y: y,
+				dx: dx,
+				dy: dy,
+				timeOn: on,
+				timeOff: off
+			});
+		}
+
 		var dots = [];
 		var ds = $(".dot");
 		for(var i = 0; i < ds.size(); i++){
@@ -312,14 +341,23 @@ function BuilderScreen(){
 				y: d.position().top
 			});
 		}
+		var end = $(".end");
+		var endObj = {
+			x: end.position().left,
+			y: end.position().top,
+			width: end.width(),
+			height: end.height()
+		};
 
 		var player = $(".player");
 		var output = {
 			platforms: platforms,
 			kblocks: kBlocks,
+			laserguns: laserguns,
 			dots: dots,
 			playerX: player.position().left,
-			playerY: player.position().top
+			playerY: player.position().top,
+			end: endObj
 		};
 		$("#output").html(JSON.stringify(output));
 		GM.data.builder = {};

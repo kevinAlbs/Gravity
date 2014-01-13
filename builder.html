@@ -35,6 +35,13 @@
 		width: 100px;
 		height: 10px;
 	}
+	.end{
+		width: 10px;
+		height: 100px;
+		background: "#F00";
+		top: 300px;
+		left: 300px;
+	}
 	.dot{
 		width: 10px;
 		height: 10px;
@@ -105,6 +112,23 @@
 	.screen{
 		display: none;
 	}
+	.lasergun input{
+
+	}
+	.lasergun{
+		width: 5px;
+		height: 5px;
+		background: #555;
+	}
+	.lasergun .handle{
+		position: absolute;
+		left: 10px;
+		top: 10px;
+		width: 10px;
+		height: 10px;
+		border-radius: 5px;
+		background: #000;
+	}
 	</style>
 	<link href="jquery-ui/themes/base/jquery.ui.all.css" type="text/css" rel="stylesheet"/>
 </head>
@@ -115,6 +139,7 @@
 	<button value="vplatform" data-cursor="auto">V-Platform (v)</button>
 	<button value="kblock" data-cursor="auto">KBlock (k)</button>
 	<button value="dot" data-cursor="auto">Dot (o)</button>
+	<button value="lasergun" data-cursor="auto">Lasergun (l)</button>
 	<button value="delete" data-cursor="url('images/delete.png'), auto">Delete (d)</button>
 	<button value="export" data-cursor="auto">Export (e)</button>
 	To switch, press (q)
@@ -124,6 +149,7 @@
 	<div id="screen-builder" class="screen no-highlight">
 		<div id="scroller" class="">
 		<div class="object player"></div>
+		<div class="object end"></div>
 		<div class="object platform init1"></div>
 		<div class="object platform init2"></div>
 		<div class="object platform init3"></div>

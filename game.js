@@ -159,6 +159,8 @@ GM.game = (function(){
 		that.p = player;
 		paused = false;
 		started = true;
+		gravSwitch = 3;
+		gravSwitchLock = false;
 		requestAnimationFrame(update);//start updating process
 	}
 
