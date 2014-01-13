@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title>This is no Game</title>
+	<title>Gravity</title>
 	<link href='http://fonts.googleapis.com/css?family=Sintony:400,700' rel='stylesheet' type='text/css'>
 	<link href="style.css?v2" rel="stylesheet" type="text/css" />
 	
@@ -17,6 +17,7 @@
 
 		<img src="images/arrows.png" alt="Arrow keys"/>
 		<p>Move</p>
+		<p>Press space to restart</p>
 	</div>
 	<div id="screen-loading" class="screen no-highlight">
 		<h2>Loading...</h2>
@@ -41,7 +42,6 @@
 	<div id="screen-win" class="screen no-highlight">
 		<h2>Congratulations</h2>
 		<p>You completed all ten stages.</p>
-		<p>However, it is unfortunate that this is not a game.</p>
 		<p>You finished with <strong id="final_death_count"></strong> deaths</p>
 		<br/>
 		<h3>Credits</h3>
@@ -49,12 +49,10 @@
 		<p><b>Idea</b> Kaitlin Kohut</p>
 	</div>
 </div>
-<!--
 <footer>
 	Developed by <a href="http://kevinalbs.com" target="_blank" title="View Kevin Albertson's Portfolio">Kevin Albertson</a><br/>
-	View source or contribute on <a href="" target="_blank" title="View GitHub repository">GitHub</a>
+	View source or contribute on <a href="https://github.com/kevinAlbs/Gravity" target="_blank" title="View GitHub repository">GitHub</a>
 </footer>
--->
 <p id="debug"></p>
 <script>
 	var GM = {}; //mediator for gameplay, screens, dependency loading

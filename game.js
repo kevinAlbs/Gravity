@@ -8,7 +8,7 @@
 GM.game = (function(){
 	var that = {};
 	that.debug = {
-		noDie : true,
+		noDie : false,
 		stageTest: true
 	};
 	that.delta = 0;	
@@ -297,7 +297,9 @@ GM.game = (function(){
 		if(keys.restart){
 			if(!restartLock){
 				restartLock = true;
-				deathCount++;
+				if(!player.isDead()){
+					deathCount++;
+				}
 				that.startGame();
 				console.log("Starting game");
 			}

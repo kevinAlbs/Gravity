@@ -37,7 +37,7 @@
 		position: relative;
 	}
 	footer{
-		width: 1000px;
+		width: 600px;
 		margin: 10px auto;
 		font-size: 12px;
 	}
@@ -45,7 +45,7 @@
 		color: #000;
 	}
 	footer a:hover{
-		color: #FFF;
+		color: #333;
 	}
 	.screen{
 		display: none;
