@@ -103,6 +103,7 @@
 	}
 	#screen-menu h1{
 		font-size: 96px;
+		padding-left: 10px;
 	}
 	#screen-menu ul{
 		list-style-type: none;
@@ -150,4 +151,28 @@
 		border-top: 1px black solid;
 		border-bottom: 1px black solid;
 		border-left: 1px black solid;
+	}
+	#hud span{
+		background: #00FF1E;
+		color: #000;
+		font-weight: bold;
+		display: inline-block;
+		width: 30px;
+		height: 25px;
+		padding-top: 5px;
+		position: relative;
+		top: -0px;
+		text-align: center;
+		border-radius: 15px;
+	}
+	#hud #death_count{
+		background-color: #ED3939;
+	}
+	#hud #stage{
+		background-color: #FFEE00;
+	}
+	#hud #status{
+		width: 100%;
+		padding: 5px 0;
+		color: #FFEE00;
 	}

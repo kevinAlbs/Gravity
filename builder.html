@@ -147,6 +147,15 @@
 	<span>Tool: cursor</span>
 </div>
 <div id="container">
+	<div id="instructions">
+		<a href="#" id="show_hide">&raquo;</a>
+		<img src="images/wasd.png" alt="WASD"/>
+		<p>Switch gravity</p>
+
+		<img src="images/arrows.png" alt="Arrow keys"/>
+		<p>Move</p>
+		<p>Press space to restart</p>
+	</div>
 	<div id="screen-builder" class="screen no-highlight">
 		<div id="scroller" class="">
 		<div class="object player"></div>
@@ -166,12 +175,13 @@
 			<p>Gravity Switches: <span id="grav_switch_amt">0</span></p>
 			<p>Deaths: <span id="death_count">0</span></p>
 			<p>Stage <span id="stage">1</span></p>
+			<p id="status"></p>
 		</div>
 	</div>
 	<div id="screen-win" class="screen no-highlight">
 		<h2>Congratulations</h2>
-		<p>You completed all ten stages.</p>
-		<p>However, it is unfortunate that this is not a game.</p>
+		<p>You completed all stages.</p>
+		<p>You finished with <strong id="final_death_count"></strong> deaths</p>
 		<br/>
 		<h3>Credits</h3>
 		<p><b>Development</b> <a href="http://kevinalbs.com" target="_blank" title="Visit his portfolio">Kevin Albertson</a></p>
@@ -223,7 +233,7 @@
 <script src="particleList.js"></script>
 <script src="viewport.js"></script>
 <script>
-fileInput = GM.data.stages[0];
+fileInput = GM.data.stages[13];
 var bScreen = new BuilderScreen(),
 	gScreen = new GameScreen();
 var flag = false;

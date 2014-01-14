@@ -115,6 +115,7 @@ GM.objectList = (function(){
 		var prev = null;
 		for(var n = dotroot; n != null; n = n.next){
 			if(n.collidingWith(p)){
+				GM.deps.bop.play();
 				GM.game.generateParticles({
 					x:n.getX() + n.getWidth()/2,
 					y:n.getY() + n.getHeight()/2,

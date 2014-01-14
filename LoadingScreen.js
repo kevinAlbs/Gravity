@@ -2,6 +2,10 @@ function LoadingScreen(nextScreen){
 	/* screen methods */
 	this.init = function(){
 		GM.game.loadDependencies(GM.data.dependencies, function(){
+			GM.deps.bg.addEventListener("ended", function(){
+				this.currentTime = 0;
+				this.play();
+			}, false);
 			GM.deps.bg.play();
 			if(nextScreen){
 				GM.switchScreen(nextScreen);

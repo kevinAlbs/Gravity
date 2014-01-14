@@ -8,7 +8,7 @@
 GM.game = (function(){
 	var that = {};
 	that.debug = {
-		noDie : false,
+		noDie : !false,
 		stageTest: true
 	};
 	that.delta = 0;	
@@ -46,9 +46,11 @@ GM.game = (function(){
 		numGravSwitches = 100,
 		restartLock = false,
 		deathCount = 0,
+		hudStat = "",
 		hud = {
 			gravitySwitches: document.getElementById("grav_switch_amt"),
 			stage: document.getElementById("stage"),
+			status: document.getElementById("status"),
 			deathCount: document.getElementById("death_count"),
 			deathCountFinal: document.getElementById("final_death_count")
 		},
@@ -164,6 +166,7 @@ GM.game = (function(){
 			}
 			else{
 				var sData = GM.data.stages[current_stage];
+				hudStat = sData.hudStat || "";
 				numGravSwitches = sData.numGravSwitches;
 				console.log(sData);
 				buildFromData(sData);
@@ -362,9 +365,10 @@ GM.game = (function(){
 		GM.objectList.update();
 		paint();
 		if(!player.isDead()){
-			if(GM.objectList.checkEndBlockCollision(player)){
+			if(GM.objectList.checkEndBlockCollision(player) && !stageEnd){
 				//also checks if end of stage
 				stageEnd = true;
+				GM.deps.levelEnd.play();
 			}
 			var kb = GM.objectList.collidingKBlocks(player);
 			if(kb != null){
@@ -495,6 +499,7 @@ GM.game = (function(){
 		if(that.debug.noDie){return;}
 		if(!player.isDead()){
 			deathCount++;
+			GM.deps.death.play();
 			player.getKilled();
 			that.updateHUD();
 		}
@@ -508,9 +513,10 @@ GM.game = (function(){
 
 	that.updateHUD = function(){
 		hud.stage.innerHTML = (current_stage+1);
-		hud.deathCount.innerHTML = (deathCount);
+		hud.status.innerHTML = hudStat;
+		hud.deathCount.innerHTML = deathCount;
 		hud.gravitySwitches.innerHTML = numGravSwitches;
-		hud.deathCountFinal.innerHTML = (deathCount);
+		hud.deathCountFinal.innerHTML = deathCount;
 	}
 
 	return that;
