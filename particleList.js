@@ -55,7 +55,6 @@ GM.particleList = (function(){
 			color: "#FFF"
 		};
 		GM.utils.extend_obj(stg, defaults);
-		console.log(stg);
 		var hav = stg.angle_variance/2;//half of angle variance
 		var htv = stg.time_variance/2;
 		var hsxv = stg.init_speed_x_variance/2;

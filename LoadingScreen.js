@@ -7,6 +7,7 @@ function LoadingScreen(nextScreen){
 				this.play();
 			}, false);
 			GM.deps.bg.play();
+			console.log("Switching screen from loading screen");
 			if(nextScreen){
 				GM.switchScreen(nextScreen);
 			}

@@ -11,6 +11,7 @@ This was made for the Mini Ludum Dare #48. We chose the theme of deceit.
 - Change bg music
 
 ## Issues ##
+- Firefox for some reason restarts game in second level!
 - [fixed?] Floating outside platform bug
 - A bit of fluctuation on platforms (might be due to how I check if the player is on a platform)
 - Opening multiple tabs of the game causes it not to load...

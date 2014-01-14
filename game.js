@@ -8,7 +8,7 @@
 GM.game = (function(){
 	var that = {};
 	that.debug = {
-		noDie : !false,
+		noDie : false,
 		stageTest: true
 	};
 	that.delta = 0;	
@@ -118,7 +118,7 @@ GM.game = (function(){
 		}
 	}
 	function handleKeyDown(e){
-		console.log(e.which);
+		//console.log(e.which);
 		switchKeys(e, true);
 	}
 
@@ -168,7 +168,6 @@ GM.game = (function(){
 				var sData = GM.data.stages[current_stage];
 				hudStat = sData.hudStat || "";
 				numGravSwitches = sData.numGravSwitches;
-				console.log(sData);
 				buildFromData(sData);
 				player = new Player();
 				player.setX(sData.playerX);
@@ -282,6 +281,7 @@ GM.game = (function(){
 			ctx.closePath();
 			ctx.fill();
 			if(transition_size > 1500){
+				transition_size = 0;
 				//start next stage
 				current_stage++;
 				if(current_stage >= GM.data.stages.length){
@@ -426,7 +426,7 @@ GM.game = (function(){
 		GM.deps = {};
 		function loaded(){
 			loadedTotal++;
-			if(loadedTotal >= total){
+			if(loadedTotal == total){ /* Strange bug that it seems that for some reason, Firefox will continue to call this method even after loading */
 				//finished loading all dependencies
 				callback.call(window);
 			}
@@ -467,7 +467,7 @@ GM.game = (function(){
 	};
 
 	that.startGame = function(){
-		console.log("Stage started");
+		//console.log("Stage started");
 		destroy();
 		init();
 	};

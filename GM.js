@@ -6,6 +6,7 @@ a screen is an object containing the following methods:
 */
 GM.curScreen = null;
 GM.switchScreen = function(screen, noRestart){
+	console.log("Switching screen");
 	//if noRestart is true, it will not re-init the screen, only hide/show
 	if(!screen){
 		return;
